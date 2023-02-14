@@ -1,4 +1,27 @@
-load= async ()=>{
+var fs = require('fs');
+
+import {
+  abs,
+  cat,
+  dir,
+  exists,
+  home,
+  join,
+  list,
+  ls,
+  mkdir,
+  move,
+  name,
+  read,
+  remove,
+  rename,
+  sep,
+  stat,
+  tmp,
+  write,
+} from './files.js'
+
+let load_some = async ()=>{
   const handle = await window.showDirectoryPicker()
   
   
@@ -18,28 +41,15 @@ load= async ()=>{
   
 }
 
-write_something= async ()=>{
-  console.log('start ')
-  var fs = require('fs');
-  console.log('fs loaded')
+var write_some= async ()=>{
+
   
   
-  fs.writeFile('/test.txt', 'Cool, I can do this in the browser!', function (err) {
-    console.log('start')
-    fs.readFile('/test.txt', function (err, contents) {
-      console.log(contents.toString());
-    })
-}) 
+
+  console.log( await write('/a/b/c.txt') )
+
+
 }
 
-print = ()=> {
-  console.log('print')
-}
-
-async function test () {
-  console.log('run')
-  await load()
-  await write()
-}
-
-//test()
+document.getElementById("load_some").addEventListener('click', load_some)
+document.getElementById("write_some").addEventListener('click', write_some)

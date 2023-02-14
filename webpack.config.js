@@ -9,7 +9,10 @@ module.exports = {
         'path': 'browserfs/dist/shims/path.js',
         'processGlobal': 'browserfs/dist/shims/process.js',
         'bufferGlobal': 'browserfs/dist/shims/bufferGlobal.js',
-        'bfsGlobal': require.resolve('browserfs')
+        'bfsGlobal': require.resolve('browserfs'),
+        'util': 'util/util.js',
+        'os': 'os-browserify/browser.js',
+        
       }
     },
     // REQUIRED to avoid issue "Uncaught TypeError: BrowserFS.BFSRequire is not a function"
@@ -25,10 +28,13 @@ module.exports = {
     ],
     entry: './bundle.js',
     output: {
-      filename: 'index.js'
+      filename: 'index.js',
+      sourceMapFilename: "index.js.map",
     },
     experiments: {
       topLevelAwait: true
     },
-    mode: 'development'
+    mode: 'development',
+    devtool: "eval-source-map",
+    
 };
