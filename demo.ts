@@ -12,7 +12,7 @@ var write_some= async ()=>{
   console.log('asdf')
   
 
-  console.log(  fs.abs('/a/sfd/ssdfasdfsd/c.txt') )
+  console.log(  fs.write('/a/c.txt', 'asdfasdfasdfasdf') )
 
 
 }

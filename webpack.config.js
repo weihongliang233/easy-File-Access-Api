@@ -30,7 +30,11 @@ module.exports = {
     noParse: /browserfs\.js/,
     rules: [
       // all files with a `.ts`, `.cts`, `.mts` or `.tsx` extension will be handled by `ts-loader`
-      { test: /\.([cm]?ts|tsx)$/, loader: "ts-loader" }
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
     ]
   },
   plugins: [
@@ -39,7 +43,7 @@ module.exports = {
     // to expose a BrowserFS global.
     new webpack.ProvidePlugin({ BrowserFS: 'bfsGlobal', process: 'processGlobal', Buffer: 'bufferGlobal' })
   ],
-  entry: './dist_tsc/demo.js',
+  entry: './demo.ts',
   output: {
     filename: 'index.js',
     sourceMapFilename: "index.js.map",
@@ -50,5 +54,7 @@ module.exports = {
   mode: 'development',
   devtool: "source-map",
   watch: true,
-
+  watchOptions: {
+    ignored: ['*.js', '*.map' , '**/node_modules']
+  }
 };
