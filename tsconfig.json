@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "outDir": "./",
+        "inlineSourceMap": true,
+        "noImplicitAny": true,
+        "module": "commonjs",
+        "target": "es5",
+        "jsx": "react",
+        "allowJs": true,
+    },
+    "files": [
+        "files.ts"
+    ],
+    "exclude": ["node_modules", "**/*.spec.ts"],
+    "noImplicitAny": false,
+    "esModuleInterop": true
+}

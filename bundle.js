@@ -21,6 +21,8 @@ import {
   write,
 } from './files.js'
 
+const path = require('path')
+
 let load_some = async ()=>{
   const handle = await window.showDirectoryPicker()
   
@@ -43,10 +45,10 @@ let load_some = async ()=>{
 
 var write_some= async ()=>{
 
-  
+  console.log('asdf')
   
 
-  console.log( await write('/a/b/c.txt') )
+  console.log( (await stat('/a/sfd')).isDirectory() )
 
 
 }
