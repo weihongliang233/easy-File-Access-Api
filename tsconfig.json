@@ -1,17 +1,29 @@
 {
     "compilerOptions": {
-        "outDir": "./",
+        "outDir": "./dist_tsc",
         "inlineSourceMap": true,
-        "noImplicitAny": true,
-        "module": "commonjs",
-        "target": "es5",
+        "noImplicitAny": false,
+        //"module": "ESNext",
+        "target": "ESNext",
         "jsx": "react",
         "allowJs": true,
+        "types": [ "@types/wicg-file-system-access"],
+        "moduleResolution": "node",
+        "noResolve": true,
+        "strict": false,
+        "paths": {
+            "fs": ["./node_modules/browserfs/dist/shims/fs.js"],
+            "path": ["./node_modules/browserfs/dist/shims/path.js"],
+            "os": ["./node_modules/os-browserify/browser.js"],
+            "browserfs": ["./node_modules/browserfs/dist/browserfs.js"],
+            "util": ["./node_modules/util/util.js"]
+        }
     },
     "files": [
-        "files.ts"
+        "index.ts",
+        "demo.ts"
     ],
     "exclude": ["node_modules", "**/*.spec.ts"],
+    "esModuleInterop": false,
     "noImplicitAny": false,
-    "esModuleInterop": true
 }

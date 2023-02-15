@@ -1,9 +1,9 @@
-// The best filesystem for promises and array manipulation
+
 import * as fs from 'fs';
-const path = require('path')
+import * as path from 'path'
 import { homedir, tmpdir } from "os";
 import { promisify } from "util";
-
+import * as BrowserFS  from 'browserfs'
 
 // Retrieve the full, absolute path for the path
 const abs = (name = ".", base = '/') => {
@@ -143,46 +143,36 @@ const write = async (name:string, body = "") => {
   return name;
 };
 
-const files = {
-  abs,
-  cat,
-  dir,
-  exists,
-  home,
-  join,
-  list,
-  ls: list,
-  mkdir,
-  move,
-  name,
-  read: cat,
-  remove,
-  rename: move,
-  sep,
-  stat,
-  tmp,
-  write,
-};
-
-export {
-  abs,
-  cat,
-  dir,
-  exists,
-  home,
-  join,
-  list,
-  list as ls,
-  mkdir,
-  move,
-  name,
-  cat as read,
-  remove,
-  move as rename,
-  sep,
-  stat,
-  tmp,
-  write,
-};
-
-export default files;
+export default class EasyFileAccess {
+  constructor(handle: FileSystemHandle) {
+    BrowserFS.install(window);
+    // Configures BrowserFS to use the LocalStorage file system.
+    BrowserFS.configure({
+      fs: "FileSystemAccess",
+      options: { handle }
+    }, function (e: any) {
+      if (e) {
+        throw e;
+      }
+      // Otherwise, BrowserFS is ready-to-use!
+      console.log('Browserfs ready-to-use!')
+    })
+  }
+  abs = abs
+  cat = cat
+  dir = dir
+  exists =exists
+  home = home
+  join = join
+  list = list
+  mkdir = mkdir
+  move = move
+  name = name
+  read = cat
+  remove = remove
+  rename = move
+  sep = sep
+  stat =stat
+  tmp = tmp
+  write = write
+}

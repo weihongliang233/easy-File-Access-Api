@@ -39,7 +39,7 @@ module.exports = {
     // to expose a BrowserFS global.
     new webpack.ProvidePlugin({ BrowserFS: 'bfsGlobal', process: 'processGlobal', Buffer: 'bufferGlobal' })
   ],
-  entry: './bundle.js',
+  entry: './dist_tsc/demo.js',
   output: {
     filename: 'index.js',
     sourceMapFilename: "index.js.map",
@@ -48,7 +48,7 @@ module.exports = {
     topLevelAwait: true
   },
   mode: 'development',
-  devtool: "eval-source-map",
+  devtool: "source-map",
   watch: true,
 
 };
