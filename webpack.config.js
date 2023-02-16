@@ -41,7 +41,14 @@ module.exports = {
     // Expose BrowserFS, process, and Buffer globals.
     // NOTE: If you intend to use BrowserFS in a script tag, you do not need
     // to expose a BrowserFS global.
-    new webpack.ProvidePlugin({ BrowserFS: 'bfsGlobal', process: 'processGlobal', Buffer: 'bufferGlobal' })
+    new webpack.ProvidePlugin({ BrowserFS: 'bfsGlobal', process: 'processGlobal', Buffer: 'bufferGlobal' }),
+    new function() {
+      this.apply = (compiler) => {
+          compiler.hooks.done.tap("Log On Done Plugin", () => {
+              console.log(("\n[" + new Date().toLocaleString() + "]") + " Begin a new compilation.\n");
+          });
+      };
+  }
   ],
   entry: {
     index: ['./index.ts'],
