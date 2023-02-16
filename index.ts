@@ -143,8 +143,9 @@ const write = async (name:string, body = "") => {
   return name;
 };
 
-export default class EasyFileAccess {
+export  class EasyFileAccess {
   constructor(handle: FileSystemHandle) {
+    console.log('adfasdasdfaasdfsdfasdf')
     BrowserFS.install(window);
     // Configures BrowserFS to use the LocalStorage file system.
     BrowserFS.configure({

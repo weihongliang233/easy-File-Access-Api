@@ -43,18 +43,23 @@ module.exports = {
     // to expose a BrowserFS global.
     new webpack.ProvidePlugin({ BrowserFS: 'bfsGlobal', process: 'processGlobal', Buffer: 'bufferGlobal' })
   ],
-  entry: './demo.ts',
+  entry: {
+    index: ['./index.ts'],
+    demo: ['./demo.ts']
+  },
   output: {
-    filename: 'index.js',
-    sourceMapFilename: "index.js.map",
+    filename: '[name].js',
+    sourceMapFilename: "[name].js.map",
+    pathinfo: true,
+    libraryTarget: "umd"
   },
   experiments: {
     topLevelAwait: true
   },
   mode: 'development',
-  devtool: "source-map",
+  devtool: "eval-source-map",
   watch: true,
-  watchOptions: {
-    ignored: ['*.js', '*.map' , '**/node_modules']
-  }
+  optimization: {
+    minimize: false
+  },
 };

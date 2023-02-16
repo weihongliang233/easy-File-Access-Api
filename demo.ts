@@ -1,4 +1,4 @@
-import EasyFileAccess from './index'
+import { EasyFileAccess } from './index'
 
 var fs: EasyFileAccess
 
@@ -12,7 +12,7 @@ var write_some= async ()=>{
   console.log('asdf')
   
 
-  console.log(  fs.write('/a/c.txt', 'asdfasdfasdfasdf') )
+  console.log(  fs.write('/a/c.txt', 'asdfasdfasdfssssasdf') )
 
 
 }
