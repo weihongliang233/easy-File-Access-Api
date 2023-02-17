@@ -7,7 +7,8 @@
         "target": "ESNext",
         "jsx": "react",
         "allowJs": true,
-        "types": [ "@types/wicg-file-system-access"],
+        "types": [ "@types/wicg-file-system-access", "@types/node"],
+        "typeRoots": ["./node_modules/@types"],
         "moduleResolution": "node",
         "noResolve": true,
         "strict": false,
@@ -16,14 +17,16 @@
             "path": ["./node_modules/browserfs/dist/shims/path.js"],
             "os": ["./node_modules/os-browserify/browser.js"],
             "browserfs": ["./node_modules/browserfs/dist/browserfs.js"],
-            "util": ["./node_modules/util/util.js"]
-        }
+            "util": ["./node_modules/util/util.js"],
+        },
     },
     "files": [
         "index.ts",
-        "demo.ts"
+        "demo.ts",
+        "index.test.ts"
     ],
     "exclude": ["node_modules", "**/*.spec.ts"],
     "esModuleInterop": false,
     "noImplicitAny": false,
+    
 }

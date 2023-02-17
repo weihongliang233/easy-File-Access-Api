@@ -8,6 +8,7 @@
     "browser-builtins": "^3.3.1",
     "browserfs": "file:../BrowserFS",
     "files": "^2.2.2",
+    "lodash": "^4.17.21",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
     "swear": "^1.1.2",
@@ -18,11 +19,12 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx webpack"
+    "watch": "npx webpack"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@jest/globals": "^29.4.3",
     "@types/node": "^18.13.0",
     "webpack-cli": "^5.0.1"
   }

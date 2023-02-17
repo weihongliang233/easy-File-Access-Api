@@ -52,7 +52,8 @@ module.exports = {
   ],
   entry: {
     index: ['./index.ts'],
-    demo: ['./demo.ts']
+    demo: ['./demo.ts'],
+    test: ['./index.test.ts']
   },
   output: {
     filename: '[name].js',
