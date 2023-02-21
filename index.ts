@@ -2,26 +2,11 @@
 
 import * as fs from 'fs';
 import * as path from 'path'
-import { homedir, tmpdir } from "os";
 import { promisify } from "util";
 import * as BrowserFS  from 'browserfs'
 
-function promisify_( asyncFn ) {
-  // 方法内部我们需要调用asyncFn方法，并传递原始参数，所以需要返回一个方法来接收参数
-  return function(...args) { // 由于需要接收参数，所以参数我们可以写为...args
-          // 我们需要执行异步操作，并返回一个结果，所以返回一个 promise实例
-          return new Promise(resolve => {
-                  // asyncFn 需要执行一个回调，所以定义一个回调方法
-                  const callback = function(...args) {
-                        resolve(args)
-                   }
-                  args.push(callback)
-                  asyncFn.apply(null, args)
-          })
-  }
-}
 
-console.log('sdf')
+
 // Retrieve the full, absolute path for the path
 const abs = (name = ".", base = '/') => {
   name = name;
@@ -29,11 +14,6 @@ const abs = (name = ".", base = '/') => {
 
   // Absolute paths do not need more absolutism
   if (path.isAbsolute(name)) return name;
-
-  if (name.slice(0, 2) === "~/") {
-    base = home();
-    name = name.slice(2);
-  }
 
   // We are off-base here; recover the viable base option
   if (!base || typeof base !== "string") {
@@ -55,6 +35,12 @@ const cat = async (name: string):Promise<string> => {
 // Get the directory from path
 const dir =  (name: string):string => {
   name = abs(name);
+  if (name === '/'){
+    return path.dirname(name);
+  }
+  if (name.endsWith('/')){
+    name = name.slice(0,name.length-1)
+  }
   return path.dirname(name);
 };
 
@@ -72,12 +58,22 @@ const existsAsync = function (name:string){
 //   properly and will return the first boolean arg of exists() as an error
 const exists = async (name:string) :Promise<boolean>=> {
   name = await abs(name);
-  const result = await existsAsync(name) as boolean
-  return result
+  if (!await existsAsync(name) as boolean){
+    return false
+  }
+  
+  if (name.endsWith('/')){
+    if (!(await stat(name)).isDirectory()){
+      return false
+    } 
+  } else {
+    if ((await stat(name)).isDirectory()){
+      return false
+    } 
+  }
+  
+  return true
 };
-
-// Get the home directory: https://stackoverflow.com/a/9081436/938236
-const home = (...args: string[]) => join(homedir(), ...args)
 
 // Put several path segments together
 const join = (...parts: string[]):string => abs(path.join(...parts));
@@ -87,7 +83,17 @@ const readDir = promisify(fs.readdir);
 const list = async (dir:string):Promise<string[]> => {
   dir = await abs(dir);
   const files = await readDir(dir);
-  return files.map((file) => abs(file, dir));
+  return Promise.all(files.map(async (file) => {
+    const full_path = abs(file, dir)
+    if ((await stat(full_path)).isDirectory()){
+      return join(full_path, path.sep)
+    } else if ((await stat(full_path)).isFile()) {
+      return full_path
+    } else {
+      throw Error('The path is not either a file or directory')
+    }
+  }));
+  
 };
 
 // Create a new directory in the specified path
@@ -100,7 +106,9 @@ const mkdir = async (name:string) => {
   // Create a recursive list of paths to create, from the highest to the lowest
   const list = name
     .split(path.sep)
-    .map((part, i, all) => all.slice(0, i + 1).join(path.sep))
+    .map((part, i, all) => all.slice(0, i + 1).join(path.sep)).map(
+      p=>{return path.join(p, path.sep)}
+    )
     .filter(Boolean);
 
   // Build each nested path sequentially
@@ -113,9 +121,14 @@ const mkdir = async (name:string) => {
 
 const renameAsync = promisify(fs.rename);
 const move = async (src:string, dst:string) => {
+  if ((src.endsWith('/') && dst.endsWith('/')) || (!src.endsWith('/') && !dst.endsWith('/'))){
+  } else{
+    throw new Error('Only rename file to file or folder to folder')
+  }
   try {
     src = await abs(src);
     dst = await abs(dst);
+    console.log(dir(dst))
     await mkdir(dir(dst));
     await renameAsync(src, dst);
     return dst;
@@ -123,9 +136,6 @@ const move = async (src:string, dst:string) => {
     throw error
   }
 };
-
-// Get the path's filename
-const name = (file:string) => path.basename(file);
 
 // Delete a file or directory (recursively)
 const removeDirAsync = promisify(fs.rmdir);
@@ -154,11 +164,7 @@ const stat = async (name:string) => {
   return await statAsync(name);
 };
 
-// Get a temporary folder
-const tmp = async (path:string) => {
-  path = await abs(path, tmpdir());
-  return await mkdir(path);
-};
+
 
 // Create a new file with the specified contents
 const writeFile = promisify(fs.writeFile);
@@ -168,6 +174,25 @@ const write = async (name:string, body = "") => {
   await writeFile(name, body, "utf-8");
   return name;
 };
+
+const add = async (full_path: string)=>{
+  if (full_path.endsWith('/')) {
+    await mkdir(full_path)
+  } else{
+    await write(full_path, '')
+  }
+}
+
+const add_for = async (par: string, child: string) => {
+  var part1, part2
+  if (par.endsWith('/')){
+    part1 = par
+  }else{
+    part1 = dir(par)
+  }
+  
+  await add_for(path.join(part1, child))
+}
 
 export  class EasyFileAccess {
   constructor(handle: FileSystemHandle) {
@@ -188,7 +213,6 @@ export  class EasyFileAccess {
   cat = cat
   dir = dir
   exists =exists
-  home = home
   join = join
   list = list
   mkdir = mkdir
@@ -199,6 +223,6 @@ export  class EasyFileAccess {
   rename = move
   sep = sep
   stat =stat
-  tmp = tmp
   write = write
+  add = add
 }
