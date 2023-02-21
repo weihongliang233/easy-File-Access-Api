@@ -9,8 +9,6 @@ var exists, mkdir, write, cat, remove, abs, rename, stat, sep, list, test_rename
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-// 文件操作不能太频繁
-
 const describe = async (description: string, func: any) => {
 
   console.log(`Start: ${description}`)
@@ -196,7 +194,6 @@ const start_test = async () => {
 
       await write("/demo/x/c/remove.md", "Hello!");
 
-      debugger;
 
       expect(await exists("/demo/x/")).toBe(true);
       expect(await cat("/demo/x/remove.md")).toBe("Hello!");

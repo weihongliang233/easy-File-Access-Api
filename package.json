@@ -1,12 +1,13 @@
 {
   "name": "easy-file-access-api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "./dist/index.js",
+  "homepage": "https://github.com/weihongliang233/easy-File-Access-Api",
   "dependencies": {
     "@types/wicg-file-system-access": "^2020.9.5",
     "browser-builtins": "^3.3.1",
-    "browserfs": "file:../BrowserFS",
+    "browserfs": "@devided_by_zero/browserfs-file-access-api",
     "files": "^2.2.2",
     "lodash": "^4.17.21",
     "os-browserify": "^0.3.0",
