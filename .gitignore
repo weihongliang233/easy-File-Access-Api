@@ -1,5 +1,6 @@
 node_modules/
 dist/
+dist_tsc/
 test_some/
 *.js.map
 *.js

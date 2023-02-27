@@ -191,7 +191,7 @@ const add_for = async (par: string, child: string) => {
     part1 = dir(par)
   }
   
-  await add_for(path.join(part1, child))
+  await add(path.join(part1, child))
 }
 
 export  class EasyFileAccess {
@@ -225,4 +225,5 @@ export  class EasyFileAccess {
   stat =stat
   write = write
   add = add
+  add_for = add_for
 }

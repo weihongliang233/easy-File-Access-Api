@@ -19,6 +19,7 @@
             "browserfs": ["./node_modules/browserfs/dist/browserfs.js"],
             "util": ["./node_modules/util/util.js"],
         },
+        "declaration": true
     },
     "files": [
         "index.ts",

@@ -4,7 +4,7 @@ import { isEqual } from 'lodash'
 
 
 var fs_access: EasyFileAccess
-var exists, mkdir, write, cat, remove, abs, rename, stat, sep, list, test_rename, add
+var exists, mkdir, write, cat, remove, abs, rename, stat, sep, list, test_rename, add, add_for
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -63,11 +63,13 @@ const select_handle = async () => {
   const handle = await window.showDirectoryPicker()
   fs_access = new EasyFileAccess(handle);
 
-  ({ exists, mkdir, write, cat, remove, abs, rename, stat, sep, list, add } = fs_access)
+  ({ exists, mkdir, write, cat, remove, abs, rename, stat, sep, list, add, add_for } = fs_access)
 
 }
 
 const start_test = async () => {
+  // @ts-ignore
+  window.fs = fs_access
   await describe("abs", async () => {
     await it("gets the defaults right", async () => {
       expect(await abs()).toBe('/');
@@ -349,7 +351,65 @@ const start_test = async () => {
       expect(await exists('/demo/a/b/c/e/')).toBe(true)
     })
     
-    
+  await describe("add_for", async () => {
+    await it("creates a new file within a folder", async () => {
+      // Create a new folder to use as the parent directory
+      await add_for("/demo/", "add_for/");
+  
+      // Ensure that the file doesn't already exist
+      expect(await exists("/demo/add_for/test.txt")).toBe(false);
+  
+      // Create a new file within the parent directory
+      await add_for("/demo/add_for/", "test.txt");
+  
+      // Check that the file was created successfully
+      expect(await exists("/demo/add_for/test.txt")).toBe(true);
+    });
+  
+    await it("creates a new file within a file's parent directory", async () => {
+      // Create a new file to use as the parent directory
+      await add_for("/demo/", "add_for/test2.txt");
+  
+      // Ensure that the file doesn't already exist
+      expect(await exists("/demo/add_for/test2.txt")).toBe(true);
+  
+      // Create a new file within the parent directory of the existing file
+      await add_for("/demo/add_for/test2.txt", "test3.txt");
+  
+      // Check that the file was created successfully
+      expect(await exists("/demo/add_for/test3.txt")).toBe(true);
+    });
+  
+    await it("creates a new folder within a folder", async () => {
+      // Create a new folder to use as the parent directory
+      await add_for("/demo/", "add_for2/");
+  
+      // Ensure that the folder doesn't already exist
+      expect(await exists("/demo/add_for2/test/")).toBe(false);
+  
+      // Create a new folder within the parent directory
+      await add_for("/demo/add_for2/", "test/");
+  
+      // Check that the folder was created successfully
+      expect(await exists("/demo/add_for2/test/")).toBe(true);
+    });
+  
+    await it("creates a new folder within a file's parent directory", async () => {
+      // Create a new file to use as the parent directory
+      await add_for("/demo/", "add_for3/test.txt");
+  
+      // Ensure that the folder doesn't already exist
+      expect(await exists("/demo/add_for3/test/")).toBe(false);
+  
+      // Create a new folder within the parent directory of the existing file
+      await add_for("/demo/add_for3/test.txt", "test/");
+  
+      // Check that the folder was created successfully
+      expect(await exists("/demo/add_for3/test/")).toBe(true);
+    });
+  
+  });
+  
     
   })
   console.log('ALL TEST SUCCESS !!!')
